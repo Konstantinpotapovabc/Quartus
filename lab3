@@ -1,3 +1,7 @@
+module rs_ff(
+input R, S,
+output reg Q, nQ
+);
 always @ (S , R) begin
 if (~ S ) begin
 Q <= 1'b1 ;

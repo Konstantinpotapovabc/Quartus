@@ -1,54 +1,29 @@
-module ALU #(
-parameter N = 4
- 
- 
-)(
-input [N-1:0] A, B, input [3:0] F,
-input [3:0] ALUFlagsIn, // OF-CF-NF-ZF output reg [N-1:0] Y,
-output [3:0] ALUFlagsOut // OF-CF-NF-ZF
+module dc_3_8 (
+input [2:0] addr,
+output reg [7:0] mng
 );
-reg Cout; always @* begin
-case (F)
-4'b0000: Y = A & B;	//
- 
-AND OR ADD XOR
-AND NOT OR NOT
- 
-
-4'b0001: Y = A | B;	//
-
-4'b0010: {Cout, Y} = A + B;	//
-
-4'b0011: Y = A ^ B;	//
-
-4'b0100: Y = A & ~B;	//
-
-4'b0101: Y = A | ~B;	//
-
-4'b0110: {Cout, Y} = A + (~B + 1); //
- 
-SUB (без использования "-")
-4'b0111: Y = A ^ ~B;	// XOR NOT B
-
-4'b1000: Y = A << B;
-4'b1001: Y = A <<< B;
-4'b1010: Y = (A << B) | (A >> (N - B));
-4'b1011: Y = (A >> B) | (A << (N - B));
-
-4'b1100: Y = A >> B;
-4'b1101: Y = A >>> B;
-4'b1110: Y = (A >> B) | (A << (N - B));
-4'b1111: Y = (A == B) ? {N{1'b1}} :
-{N{1'b0}};
-default: Y = 0; endcase
-end
-
-
-assign ALUFlagsOut[3] =
-(F == 4'b0010 || F == 4'b0110) ?
-((A[N-1] == B[N-1]) && (Y[N-1] != A[N-1]))
-: 0;
-
-assign ALUFlagsOut[2] = Cout; assign ALUFlagsOut[1] = Y[N-1]; assign ALUFlagsOut[0] = (Y == 0);
-
+always @(*) case(addr)
+3'd0: mng = 8'b00000001;
+3'd1: mng = 8'b00000010;
+3'd2: mng = 8'b00000100;
+3'd3: mng = 8'b00001000;
+3'd4: mng = 8'b00010000;
+3'd5: mng = 8'b00100000;
+3'd6: mng = 8'b01000000;
+3'd7: mng = 8'b10000000;
+endcase
+endmodulemodule dc_3_8 (
+input [2:0] addr,
+output reg [7:0] mng
+);
+always @(*) case(addr)
+3'd0: mng = 8'b00000001;
+3'd1: mng = 8'b00000010;
+3'd2: mng = 8'b00000100;
+3'd3: mng = 8'b00001000;
+3'd4: mng = 8'b00010000;
+3'd5: mng = 8'b00100000;
+3'd6: mng = 8'b01000000;
+3'd7: mng = 8'b10000000;
+endcase
 endmodule
